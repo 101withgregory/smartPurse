@@ -1,13 +1,9 @@
-
-
 function App() {
-
   return (
     <>
-      <h1>Hello Project !</h1>
-       
+      <h1>Vault Fund !</h1>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
