@@ -1,5 +1,7 @@
+
 import Footer from "./components/Footer";
 import GoogleSignInButton from "./components/GoogleSignInButton";
+
 
 function App() {
   return (
@@ -8,6 +10,7 @@ function App() {
       <h1>Vault Fund !</h1>
       <GoogleSignInButton />
       <Footer />
+
     </>
   );
 }
