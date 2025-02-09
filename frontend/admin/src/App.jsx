@@ -5,13 +5,14 @@ import Transactions from "./pages/Transactions";
 import Reports from "./pages/Reports";
 import GroupManagement from "./pages/GroupManagement";
 import Support from "./pages/Support";
+import Dashboard from "./pages/Dashboard";
 
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<h1>Dashboard</h1>} />
+          <Route index element={<Dashboard/>} />
           <Route path="user-management/*" element={<UserManagement />} />
           <Route path="transactions" element={<Transactions />} />
           <Route path="group-management" element={<GroupManagement />} />

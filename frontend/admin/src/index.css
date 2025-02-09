@@ -85,7 +85,7 @@ img {
 }
 
 /* ------LAYOUT STYLES----- */
-.dashboard-container {
+.admin-container {
   display: grid;
   grid-template-areas:
     "sidebar topnav topnav"
@@ -171,4 +171,53 @@ img {
   margin-left: 20px;
 }
 
-/* ---------TOPNAv STYLES----- */
+/* ---------DASHBOARD STYLES----- */
+.dashboard-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  grid-template-rows: auto auto auto auto; 
+  grid-template-areas:
+    "summary summary summary"
+    "charts charts contributions"
+    "transactions transactions transactions";
+  gap: 1rem;
+  padding: 1rem;
+  height: 100vh;
+}
+
+/* Individual Sections */
+.financial-summary {
+  grid-area: summary;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.card {
+  flex: 1;
+  padding: 1rem;
+  background: var(--color-white);
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.charts {
+  grid-area: charts;
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.contributions {
+  grid-area: contributions;
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.transactions-table {
+  grid-area: transactions;
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+}

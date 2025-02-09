@@ -8,7 +8,7 @@ const Layout = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   return (
-    <div className={`dashboard-container ${isSidebarCollapsed ? 'collapsed' : ''}`}>
+    <div className={`admin-container ${isSidebarCollapsed ? 'collapsed' : ''}`}>
       <Sidebar isCollapsed={isSidebarCollapsed} setIsCollapsed={setIsSidebarCollapsed} />
         <TopNav />
         <div className="main-content">

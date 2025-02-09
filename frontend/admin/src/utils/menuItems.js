@@ -5,11 +5,11 @@ const menuItems = [
   {
     name: "User Management",
     path: "/user-management",
-    icon: FaUser,
-    children: [
-      { name: "View Users", path: "/user-management/view" },
-      { name: "Add User", path: "/user-management/add" }
-    ]
+    icon: FaUser
+    // children: [
+    //   { name: "View Users", path: "/user-management/view" },
+    //   { name: "Add User", path: "/user-management/add" }
+    // ]
   },
   { name: "Group Management", path: "/group-management", icon: FaUsers },
   { name: "Transactions", path: "/transactions", icon: FaCreditCard },
