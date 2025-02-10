@@ -44,7 +44,7 @@ body {
   background-color: #f5f5f5;
   color: #333;
   line-height: 1.6;
-  padding-inline:1rem;
+  overflow: hidden;
 }
 
 a {
@@ -66,10 +66,9 @@ textarea,
 select {
   font-family: 'Poppins', sans-serif;
   padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  margin: 10px 0;
-  width: 100%;
+  border-radius: 20px;
+  border: 2px solid #ccc;
+  margin-block: 1rem;
 }
 
 input:focus,
@@ -84,7 +83,153 @@ img {
   height: auto;
 }
 
+/* ------LAYOUT STYLES----- */
+.admin-container {
+  display: grid;
+  grid-template-areas:
+    "sidebar topnav topnav"
+    "sidebar content content"
+    "sidebar content content";
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  width: 100vw;
+  
+}
+
+
+.main-content {
+  background-color: var(--color-gray-light);
+  grid-area: content;
+  overflow-x: hidden;
+}
+.topnav {
+  grid-area: topnav;
+  width: 100%;
+  background-color: var(--color-white);
+  padding: 10px 20px;
+}
+
+
+/* -------SIDEBAR STYLES---- */
+
+.sidebar {
+  grid-area: sidebar;
+  background-color: var(--color-white);
+  transition: width 0.3s;
+  width: 250px;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.vaultfund-logo {
+  font-size: 1.5rem;
+}
+
+.menu {
+  margin-block: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
 
 
+.menu-link {
+  color: var(--color-black);
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  gap: 10px; 
+}
 
+.menu-link.active {
+  background-color: var(--color-gray-light);
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown {
+  margin-left: 20px;
+}
+
+/* ---------DASHBOARD STYLES----- */
+.dashboard-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  grid-template-rows: auto auto auto auto; 
+  grid-template-areas:
+    "summary summary summary"
+    "charts charts contributions"
+    "transactions transactions transactions";
+  gap: 1rem;
+  padding: 1rem;
+  height: 100vh;
+}
+
+/* Individual Sections */
+.financial-summary {
+  grid-area: summary;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.card {
+  flex: 1;
+  padding: 1rem;
+  background: var(--color-white);
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.charts {
+  grid-area: charts;
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.contributions {
+  grid-area: contributions;
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.transactions-table {
+  grid-area: transactions;
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+}
+.user-table{
+  padding: 1rem;
+}
+.search-container{
+  margin-block: 1rem;
+}
+.add-user{
+  padding: .5rem;
+}
+.sc-btn{
+  padding: .5rem;
+  cursor: pointer;
+}
