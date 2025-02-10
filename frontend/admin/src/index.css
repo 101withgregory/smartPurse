@@ -66,10 +66,9 @@ textarea,
 select {
   font-family: 'Poppins', sans-serif;
   padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  margin: 10px 0;
-  width: 100%;
+  border-radius: 20px;
+  border: 2px solid #ccc;
+  margin-block: 1rem;
 }
 
 input:focus,
@@ -220,4 +219,17 @@ img {
   background: white;
   padding: 1rem;
   border-radius: 8px;
+}
+.user-table{
+  padding: 1rem;
+}
+.search-container{
+  margin-block: 1rem;
+}
+.add-user{
+  padding: .5rem;
+}
+.sc-btn{
+  padding: .5rem;
+  cursor: pointer;
 }

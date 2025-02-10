@@ -4,7 +4,7 @@ const TransactionsTable = () => {
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    // Mock API data (this should ideally come from an API)
+   
     const fetchedData = [
       { id: 1, group_name: "Savings Club", user: "John Doe", type: "deposit", amount: 1000, status: "completed", anomaly_detected: false, date: "09/02/2025-10:30 AM" },
       { id: 2, group_name: "Family Fund", user: "Jane Smith", type: "withdrawal", amount: 500, status: "pending", anomaly_detected: false, date: "07/02/2025-11:15 AM" },
