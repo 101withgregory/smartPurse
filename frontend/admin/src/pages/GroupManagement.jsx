@@ -1,8 +1,12 @@
 import React from 'react'
+import GroupsTable from '../components/GroupsTable'
 
 function GroupManagement() {
   return (
-    <div>GroupManagement</div>
+    <div className=''>
+      <GroupsTable/>
+    </div>
+   
   )
 }
 

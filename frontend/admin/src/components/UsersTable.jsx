@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaPlusCircle } from "react-icons/fa";
+import { FaPlusCircle, FaCheckCircle } from "react-icons/fa";
 import DataTable from "react-data-table-component";
 import Modal from "react-modal";
 import styled from "styled-components";
@@ -37,7 +37,7 @@ const customStyles = {
     style: {
       backgroundColor: "#d0eaff",
       fontWeight: "bold",
-      fontSize: "16px",
+      fontSize: "12px",
     },
   },
 };
@@ -128,8 +128,8 @@ const UserTable = () => {
   ];
 
   return (
-    <div className="bg-white shadow rounded-lg p-4 user-table">
-      <h3 className="text-lg font-semibold mb-2">User Management</h3>
+    <div className="bg-white shadow rounded-lg p-4 table">
+      <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">Here are the Users <FaCheckCircle className="text-blue-500"/></h3>
       
       <div className="flex items-center justify-between search-container">
              {/* Search Input */}

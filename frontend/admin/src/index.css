@@ -220,7 +220,7 @@ img {
   padding: 1rem;
   border-radius: 8px;
 }
-.user-table{
+.table{
   padding: 1rem;
 }
 .search-container{
@@ -229,7 +229,14 @@ img {
 .add-user{
   padding: .5rem;
 }
+.add-group{
+  padding:.5rem;
+}
 .sc-btn{
+  padding: .5rem;
+  cursor: pointer;
+}
+.filter-btn{
   padding: .5rem;
   cursor: pointer;
 }

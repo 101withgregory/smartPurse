@@ -14,7 +14,7 @@ const TransactionsTable = () => {
   }, []);
 
   return (
-    <div className="bg-white shadow rounded-lg p-4 transactions-table">
+    <div className="bg-white shadow rounded-lg transactions-table">
       <h3 className="text-lg font-semibold">Latest Transactions</h3>
       <table className="w-full border-collapse mt-2">
         <thead>
@@ -36,7 +36,7 @@ const TransactionsTable = () => {
               <td className="p-2">{tx.group_name}</td>
               <td className="p-2">{tx.user}</td>
               <td className="p-2">{tx.type}</td>
-              <td className="p-2">${tx.amount}</td>
+              <td className="p-2">Ksh{tx.amount}</td>
               <td className={`p-2 ${tx.status === "pending" ? "text-yellow-500" : "text-green-500"}`}>
                 {tx.status}
               </td>

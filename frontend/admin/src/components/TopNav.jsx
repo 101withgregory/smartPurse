@@ -11,13 +11,13 @@ const TopNav = () => {
       <div className="topnav-center">
         <div className="search-box flex items-center gap-2 p-5">
           
-            <TextField
+            {/* <TextField
           id="standard-search"
           label="Search"
           type="search"
           variant="standard"
           className=""
-        /> <FiSearch className="text-gray-600 hover:text-gray-300 text-[20px] cursor-pointer"/>
+        /> <FiSearch className="text-gray-600 hover:text-gray-300 text-[20px] cursor-pointer"/> */}
         
         </div>
       </div>
