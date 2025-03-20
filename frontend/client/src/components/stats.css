@@ -1,0 +1,37 @@
+/* StatsSection.css */
+.stats-section {
+  background-color: #058fc3;
+  color: white;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.stats-heading {
+  font-weight: bold;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #ffd422;
+}
+
+.stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.stat-item {
+  flex: 1 1 200px;
+  max-width: 250px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 1.2rem;
+}

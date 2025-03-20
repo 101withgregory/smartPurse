@@ -10,7 +10,7 @@ const {
   getFlaggedTransactions,
   updateTransactionStatus,
 } = require("../controllers/transactionController.js");
-const { protect, admin } = require("../middleware/authMiddleware");
+const { protect, admin } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 

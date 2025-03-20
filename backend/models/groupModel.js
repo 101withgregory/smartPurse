@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 
 const groupSchema = mongoose.Schema(
@@ -17,10 +18,8 @@ const groupSchema = mongoose.Schema(
 
     transactions: [
       {
-        type: { type: String, enum: ["deposit", "withdrawal"], required: true },
-        amount: { type: Number, required: true },
-        user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        createdAt: { type: Date, default: Date.now },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Transaction", // Reference to Transaction model
       },
     ],
 

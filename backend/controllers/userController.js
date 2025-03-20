@@ -1,20 +1,21 @@
-const User = require("../models/User");
+
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const User = require("../models/userModel");
 
-// Generate JWT Token
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+// Generate JWT Token with Role
+const generateToken = (id, role) => {
+  return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
 // @desc    Register new user
 // @route   POST /api/users/register
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { firstName, lastName, email, password, role } = req.body;
 
-  if (!name || !email || !password) {
+  if (!firstName || !lastName || !email || !password) {
     res.status(400);
     throw new Error("Please provide all fields");
   }
@@ -30,9 +31,10 @@ const registerUser = asyncHandler(async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  // Create user
+  // Create user (default role is "user" if not provided)
   const user = await User.create({
-    name,
+    firstName,
+    lastName,
     email,
     password: hashedPassword,
     role: role || "user",
@@ -41,16 +43,18 @@ const registerUser = asyncHandler(async (req, res) => {
   if (user) {
     res.status(201).json({
       _id: user.id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       role: user.role,
-      token: generateToken(user.id),
+      token: generateToken(user.id, user.role),
     });
   } else {
     res.status(400);
     throw new Error("Invalid user data");
   }
 });
+
 
 // @desc    Login user & get token
 // @route   POST /api/users/login
@@ -63,10 +67,10 @@ const loginUser = asyncHandler(async (req, res) => {
   if (user && (await bcrypt.compare(password, user.password))) {
     res.json({
       _id: user.id,
-      name: user.name,
+      name: `${user.firstName} ${user.lastName}`,
       email: user.email,
       role: user.role,
-      token: generateToken(user.id),
+      token: generateToken(user.id, user.role),
     });
   } else {
     res.status(401);
@@ -103,8 +107,10 @@ const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
 
   if (user) {
-    user.name = req.body.name || user.name;
+    user.firstName = req.body.firstName || user.firstName;
+    user.lastName = req.body.lastName || user.lastName;
     user.email = req.body.email || user.email;
+    user.phone = req.body.phone || user.phone;
 
     if (req.body.password) {
       const salt = await bcrypt.genSalt(10);
@@ -115,8 +121,10 @@ const updateUser = asyncHandler(async (req, res) => {
 
     res.json({
       _id: updatedUser.id,
-      name: updatedUser.name,
+      firstName: updatedUser.firstName,
+      lastName: updatedUser.lastName,
       email: updatedUser.email,
+      phone: updatedUser.phone,
       role: updatedUser.role,
     });
   } else {
@@ -124,6 +132,7 @@ const updateUser = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 });
+
 
 // @desc    Delete user (Admin Only)
 // @route   DELETE /api/users/:id
@@ -139,6 +148,18 @@ const deleteUser = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 });
+const getProfile = (req, res) => {
+  if (req.user) {
+    res.status(200).json({
+      _id: req.user._id,
+      name: req.user.name,
+      email: req.user.email,
+      isAdmin: req.user.isAdmin
+    });
+  } else {
+    res.status(401).json({ message: "Not authorized" });
+  }
+};
 
 module.exports = {
   registerUser,
@@ -147,4 +168,5 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
+  getProfile
 };

@@ -3,7 +3,7 @@ import UsersTable from "../components/UsersTable";
 
 const UserManagement = () => {
   return (
-    <div className="p-4">
+    <div className="p-4 ">
        <UsersTable/>
     </div>
   );

@@ -1,9 +1,17 @@
 const express = require("express");
-const { getDashboardSummary } = require("../controllers/dashboardController");
-const { protect, admin } = require("../middleware/authMiddleware");
+const { 
+  getDashboardSummary, 
+  getSavingsChartData, 
+  getContributionsChartData, 
+
+} = require("../controllers/dashboardController");
+const { protect } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-router.get("/", protect, admin, getDashboardSummary); // Only admins can view dashboard data
+router.get("/summary", protect, getDashboardSummary);
+router.get("/savings", protect, getSavingsChartData);
+router.get("/contributions", protect, getContributionsChartData);
+
 
 module.exports = router;

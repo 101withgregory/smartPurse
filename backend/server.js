@@ -11,7 +11,7 @@ app.use(express.json()); // Parses incoming JSON requests
 app.use(express.urlencoded({ extended: true })); // Parses URL-encoded data
 
 // Connect to MongoDB
-const mongoURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/vaultfund';
+const mongoURI = process.env.MONGO_URI;
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('✅ MongoDB Connected'))
     .catch(err => console.error('❌ MongoDB Connection Error:', err));
@@ -23,8 +23,13 @@ app.get('/', (req, res) => {
 
 const userRoutes = require('./routes/userRoutes');
 app.use('/api/users', userRoutes);
+const groupRoutes = require('./routes/groupRoutes');
+app.use('/api/groups', groupRoutes);
 const dashboardRoutes = require("./routes/dashboardRoutes");
 app.use("/api/dashboard", dashboardRoutes);
+const transactionRoutes = require('./routes/transactionRoutes')
+app.use('/api/transactions', transactionRoutes)
+
 
 // Start Server
 const PORT = process.env.PORT || 5000;

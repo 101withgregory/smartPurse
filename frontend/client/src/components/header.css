@@ -1,0 +1,124 @@
+/* Navbar.css */
+* {
+  box-sizing: border-box;
+}
+
+/* .containerB {
+  background-color: #01327b;
+  padding: 0.3rem 2rem;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+} */
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #058fc3;
+  color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Ensure the navbar is above other elements */
+}
+
+.navbar-logo {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #fff;
+  flex: 1;
+}
+
+.navbar-links {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+  margin-left: auto;
+  transition: transform 0.3s ease-in-out;
+}
+
+.navbar-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  position: relative;
+  transition: color 0.3s, transform 0.3s;
+  font-weight: 500;
+}
+
+.navbar-links a:hover {
+  color: #00c6ff;
+  transform: scale(1.1);
+}
+
+.navbar-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0%;
+  height: 2px;
+  background-color: #00c6ff;
+  /* background-color: #ff9800; */
+  transition: width 0.3s ease-in-out;
+}
+
+.navbar-links a:hover::after {
+  width: 100%;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+.menu-toggle.open .menu-icon {
+  transform: rotate(90deg); /* Rotate the icon when open */
+}
+
+.navbar-links.open {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .navbar-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #058fc3;
+    width: 100%;
+    padding: 1rem;
+    animation: slideIn 0.3s ease-in-out;
+  }
+
+  .navbar-links.open {
+    display: flex;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.menu-icon {
+  font-size: 2rem;
+  display: inline-block;
+  transition: transform 0.3s ease-in-out;
+}

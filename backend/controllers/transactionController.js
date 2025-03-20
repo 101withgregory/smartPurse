@@ -1,42 +1,71 @@
 const Transaction = require("../models/transactionModel");
+// const { detectAnomalies } = require("../utils/anomalyDetection");
 
-// Create a new transaction
+// ✅ Create a new transaction
 const createTransaction = async (req, res) => {
   try {
-    const { userId, amount, type, status, description } = req.body;
+    const {
+      user,
+      group,
+      transactionType,
+      amount,
+      status,
+      previousBalance,
+      frequency,
+      category,
+      deviceType,
+      location,
+    } = req.body;
 
     const transaction = new Transaction({
-      userId,
+      user,
+      group,
+      transactionType,
       amount,
-      type,
       status,
-      description,
+      previousBalance,
+      frequency,
+      category,
+      deviceType,
+      location,
     });
 
-    // Simulated anomaly detection (this should be replaced by ML model later)
-    if (amount > 10000) {  // Example rule: flag high-value transactions
-      transaction.isFlagged = true;
-      transaction.flagReason = "High transaction amount";
+    // ✅ Detect anomalies using the ONNX model
+    const riskScore = await detectAnomalies(transaction);
+    transaction.riskScore = riskScore;
+    transaction.isFlagged = riskScore >= 80; // Flag if score exceeds threshold
+
+    if (transaction.isFlagged) {
+      transaction.flagReason = "High risk score";
     }
 
     const savedTransaction = await transaction.save();
     res.status(201).json(savedTransaction);
   } catch (error) {
+    console.error("Error creating transaction:", error);
     res.status(500).json({ message: "Error creating transaction", error });
   }
 };
 
-// Get all transactions (Admin only)
+// ✅ Get all transactions (Admin only)
 const getAllTransactions = async (req, res) => {
   try {
-    const transactions = await Transaction.find();
+    const { groupId } = req.query;
+
+    const query = groupId ? { group: groupId } : {};
+
+    const transactions = await Transaction.find(query)
+      .populate("user", "name email")
+      .populate("group", "name")
+      .sort({ createdAt: -1 });
+
     res.status(200).json(transactions);
   } catch (error) {
     res.status(500).json({ message: "Error fetching transactions", error });
   }
 };
 
-// Get a single transaction by ID
+// ✅ Get a single transaction by ID
 const getTransactionById = async (req, res) => {
   try {
     const transaction = await Transaction.findById(req.params.id);
@@ -49,24 +78,35 @@ const getTransactionById = async (req, res) => {
   }
 };
 
-// Update a transaction
+// ✅ Update a transaction
 const updateTransaction = async (req, res) => {
   try {
-    const updatedTransaction = await Transaction.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    if (!updatedTransaction) {
+    const transaction = await Transaction.findById(req.params.id);
+    if (!transaction) {
       return res.status(404).json({ message: "Transaction not found" });
     }
+
+    Object.assign(transaction, req.body);
+
+    // ✅ Detect anomalies again after update
+    const riskScore = await detectAnomalies(transaction);
+    transaction.riskScore = riskScore;
+    transaction.isFlagged = riskScore >= 80;
+
+    if (transaction.isFlagged) {
+      transaction.flagReason = "High risk score after update";
+    } else {
+      transaction.flagReason = null;
+    }
+
+    const updatedTransaction = await transaction.save();
     res.status(200).json(updatedTransaction);
   } catch (error) {
     res.status(500).json({ message: "Error updating transaction", error });
   }
 };
 
-// Delete a transaction
+// ✅ Delete a transaction
 const deleteTransaction = async (req, res) => {
   try {
     const deletedTransaction = await Transaction.findByIdAndDelete(req.params.id);
@@ -79,7 +119,7 @@ const deleteTransaction = async (req, res) => {
   }
 };
 
-// Flag a transaction manually
+// ✅ Flag a transaction manually
 const flagTransaction = async (req, res) => {
   try {
     const transaction = await Transaction.findById(req.params.id);
@@ -97,7 +137,7 @@ const flagTransaction = async (req, res) => {
   }
 };
 
-// Unflag a transaction manually
+// ✅ Unflag a transaction manually
 const unflagTransaction = async (req, res) => {
   try {
     const transaction = await Transaction.findById(req.params.id);
@@ -115,17 +155,22 @@ const unflagTransaction = async (req, res) => {
   }
 };
 
-// Get all flagged transactions
+// ✅ Get all flagged transactions
 const getFlaggedTransactions = async (req, res) => {
   try {
-    const flaggedTransactions = await Transaction.find({ isFlagged: true });
+    const { groupId } = req.query;
+
+    const query = { isFlagged: true };
+    if (groupId) query.group = groupId;
+
+    const flaggedTransactions = await Transaction.find(query);
     res.status(200).json(flaggedTransactions);
   } catch (error) {
     res.status(500).json({ message: "Error fetching flagged transactions", error });
   }
 };
 
-// Update transaction status (for payments, fraud investigations, etc.)
+// ✅ Update transaction status
 const updateTransactionStatus = async (req, res) => {
   try {
     const transaction = await Transaction.findById(req.params.id);

@@ -11,7 +11,7 @@ const menuItems = [
     //   { name: "Add User", path: "/user-management/add" }
     // ]
   },
-  { name: "Group Management", path: "/group-management", icon: FaUsers },
+  { name: "Kitty Management", path: "/group-management", icon: FaUsers },
   { name: "Transactions", path: "/transactions", icon: FaCreditCard },
   { name: "Anomaly Reports", path: "/reports", icon: FaFile },
   { name: "Support ", path: "/support", icon: FaHeadset },
