@@ -1,4 +1,4 @@
-
+const express = require("express");
 const { getAllAnomalies, getAnomalyById, addAnomaly, deleteAnomaly } = require("../controllers/anomalyController");
 const { protect, admin } = require("../middlewares/authMiddleware");
 const router = express.Router();

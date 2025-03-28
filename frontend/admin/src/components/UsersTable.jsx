@@ -24,7 +24,7 @@ const UserTable = () => {
     role: "Member",
   });
 
-  // ✅ Fetch Users
+  // Fetch Users
   useEffect(() => {
     const loadUsers = async () => {
       try {
@@ -46,7 +46,7 @@ const UserTable = () => {
     loadUsers();
   }, []);
 
-  // ✅ Open Modal
+  // Open Modal
   const openModal = (user) => {
     if (user) {
       setEditUser(user);
@@ -63,17 +63,17 @@ const UserTable = () => {
     setIsModalOpen(true);
   };
 
-  // ✅ Close Modal
+  // Close Modal
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
-  // ✅ Handle Form Change
+  // Handle Form Change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ✅ Save User (Create or Update)
+  // Save User (Create or Update)
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -84,7 +84,7 @@ const UserTable = () => {
       }
 
       if (editUser) {
-        // ✅ Update Existing User
+        // Update Existing User
         await updateUser(token, editUser._id, formData);
         setUsers(
           users.map((user) =>
@@ -93,7 +93,7 @@ const UserTable = () => {
         );
         Swal.fire("Success", "User updated successfully", "success");
       } else {
-        // ✅ Add New User
+        // Add New User
         const newUser = await addUser(token, formData);
         setUsers([...users, newUser]);
         Swal.fire("Success", "User added successfully", "success");
@@ -105,7 +105,7 @@ const UserTable = () => {
     }
   };
 
-  // ✅ Delete User
+  // Delete User
   const handleDelete = async (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -130,7 +130,7 @@ const UserTable = () => {
     });
   };
 
-  // ✅ Filter Users
+  // Filter Users
   const filteredUsers = users.filter(
     (user) =>
       user.firstName.toLowerCase().includes(search.toLowerCase()) ||
@@ -139,7 +139,7 @@ const UserTable = () => {
       user.role.toLowerCase().includes(search.toLowerCase())
   );
 
-  // ✅ Table Columns
+  // Table Columns
   const columns = [
     { name: "ID", cell: (row, index) => index + 1, width: "50px" },
     { name: "First Name", selector: (row) => row.firstName, sortable: true },
@@ -152,13 +152,13 @@ const UserTable = () => {
         <>
           <button
             onClick={() => openModal(row)}
-            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition"
+            className="bg-blue-500 text-white sc-btn rounded hover:bg-blue-600 transition"
           >
             Edit
           </button>
           <button
             onClick={() => handleDelete(row._id)}
-            className="bg-red-500 text-white px-3 py-1 ml-2 rounded hover:bg-red-600 transition"
+            className="bg-red-500 text-white sc-btn ml-2 rounded hover:bg-red-600 transition"
           >
             Delete
           </button>
@@ -169,8 +169,8 @@ const UserTable = () => {
 
   return (
     <div className="p-6 bg-gray-50 rounded-md shadow-md">
-      {/* ✅ Search & Add User */}
-      <div className="flex justify-between items-center mb-4">
+      {/* Search & Add User */}
+      <div className="flex justify-between items-center mb-4 padding">
         <input
           type="text"
           placeholder="Search users..."
@@ -180,13 +180,13 @@ const UserTable = () => {
         />
         <button
           onClick={() => openModal(null)}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 flex items-center"
+          className="bg-blue-500 text-white gap-3 rounded-md hover:bg-blue-600 flex sc-btn items-center"
         >
-          <FaPlusCircle className="mr-2" /> Add User
+          <FaPlusCircle className="mr-2" /> add user
         </button>
       </div>
 
-      {/* ✅ Loading Spinner */}
+      {/* Loading Spinner */}
       {loading ? (
         <div className="flex justify-center py-10">
           <ClipLoader color="#3b82f6" loading={loading} size={50} />
@@ -195,15 +195,15 @@ const UserTable = () => {
         <DataTable columns={columns} data={filteredUsers} pagination />
       )}
 
-      {/* ✅ MODAL */}
+      {/* MODAL */}
       {isModalOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+          className="fixed inset-0 bg-black/50 flex items-center justify-center"
           onClick={closeModal}
         >
           <form
             onSubmit={handleSubmit}
-            className="bg-white p-6 rounded-lg shadow-md w-96"
+            className="bg-white padding rounded-lg shadow-md w-96"
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-xl font-semibold mb-4">
@@ -230,9 +230,9 @@ const UserTable = () => {
               <option value="Admin">Admin</option>
               <option value="Member">Member</option>
             </select>
-            <div className="flex justify-end space-x-2">
-              <button type="button" onClick={closeModal} className="bg-gray-300 text-black px-4 py-2 rounded">Cancel</button>
-              <button className="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+            <div className="flex justify-end gap-3">
+              <button type="button" onClick={closeModal} className="bg-gray-300 text-black sc-btn rounded">Cancel</button>
+              <button className="bg-green-500 text-white sc-btn  rounded">Save</button>
             </div>
           </form>
         </div>

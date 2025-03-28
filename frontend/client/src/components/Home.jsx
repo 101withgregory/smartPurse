@@ -23,6 +23,7 @@ import Chatbot from "./Chatbot";
 import Dashboard from "./Dashboard";
 import Kitty from "./Kitty";
 import Contribute from "./Contribute";
+import MyKitties from "./MyKitties";
 
 const Home = () => {
   useEffect(() => {
@@ -57,7 +58,9 @@ const Home = () => {
         <Route path="/track-progress" element={<TrackProgress />} />
         <Route path="/v-admin" element={<Dashboard />} />
         <Route path="/kitty" element={<Kitty />} />
+        <Route path="/my_kitties" element={<MyKitties />} />
         <Route path="/contribute" element={<Contribute />} />
+        <Route path="/contribute/:kittyAddress" element={<Contribute />} />
       </Routes>
       {!hideHeaderFooter && <Footer />}
     </div>

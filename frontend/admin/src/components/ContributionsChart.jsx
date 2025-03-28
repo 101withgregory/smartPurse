@@ -11,11 +11,30 @@ const ContributionsChart = () => {
     const fetchContributions = async () => {
       try {
         const data = await dashboardSummaryService.getContributionsChartData();
-        setContributions(data);
+        const totalContributions = data.reduce(
+          (total, item) => total + (item.totalContributions || 0),
+          0
+        );
+    
+        const normalizedData = data.map((item) => ({
+          ...item,
+          percentage: totalContributions
+            ? ((item.totalContributions / totalContributions) * 100).toFixed(1)
+            : 0,
+        }));
+    
+        // Sort and take the top 3 contributions
+        const topContributions = normalizedData
+          .sort((a, b) => b.totalContributions - a.totalContributions)
+          .slice(0, 3);
+    
+        console.log("Top 3 Contributions:", topContributions);
+        setContributions(topContributions);
       } catch (error) {
         console.error("Error fetching contributions data:", error);
       }
     };
+    
 
     fetchContributions();
   }, []);
@@ -23,64 +42,44 @@ const ContributionsChart = () => {
   return (
     <div className="bg-white shadow rounded-lg p-6">
       <h3 className="text-lg font-semibold text-center mb-4">
-        Contributions Distribution
+        Top 3 Kitty Contributions Distribution
       </h3>
-      <div className="w-full h-[300px] object-contain">
-        <ResponsiveContainer>
+      <div className="w-full h-[320px] object-contain">
+        <ResponsiveContainer width="100%" height="100%">
           <PieChart>
-            {/* Define gradients for the 3D effect */}
-            <defs>
-              {COLORS.map((color, index) => (
-                <linearGradient id={`color-${index}`} key={index} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={color} />
-                  <stop offset="100%" stopColor="#000" stopOpacity="0.2" />
-                </linearGradient>
-              ))}
-            </defs>
-
             <Pie
               data={contributions}
               cx="50%"
               cy="50%"
-              outerRadius={100} // ✅ Full pie chart without inner radius
-              paddingAngle={3}
-              dataKey="amount"
-              nameKey="group"
-              label={({ name, percent }) =>
-                `${name} ${(percent * 100).toFixed(0)}%`
+              outerRadius={100}
+              paddingAngle={2}
+              dataKey="totalContributions"
+              nameKey="kittyName"
+              label={({ name, percentage }) =>
+                `${name.length > 10 ? name.substring(0, 10) + "..." : name} (${percentage}%)`
               }
               labelLine={false}
-              isAnimationActive={true}
             >
               {contributions.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={`url(#color-${index})`}
-                  stroke="#444"
+                  fill={COLORS[index % COLORS.length]}
+                  stroke="#fff"
                   strokeWidth={1}
                 />
               ))}
             </Pie>
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "#ffffff",
-                borderRadius: "8px",
-                padding: "10px",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-                color: "#333",
-                fontSize: "14px",
-              }}
-            />
+            <Tooltip />
             <Legend
               verticalAlign="bottom"
-              iconType="circle"
-              iconSize={12}
               layout="horizontal"
-              align="center"
+              iconType="circle"
+              iconSize={10}
               wrapperStyle={{
-                fontSize: "14px",
-                color: "#4B5563",
-                marginTop: "10px",
+                fontSize: "12px",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
               }}
             />
           </PieChart>

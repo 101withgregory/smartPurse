@@ -140,6 +140,7 @@ img {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  
 }
 
 
@@ -213,7 +214,9 @@ img {
   padding: 1rem;
   border-radius: 8px;
 }
-
+.fit{
+  object-fit: contain;
+}
 .transactions-table {
   grid-area: transactions;
   background: white;
@@ -229,10 +232,12 @@ img {
 .add-user{
   padding: .5rem;
 }
+.padding{
+  padding: 1rem;
+}
 .sc-btn{
   padding: .5rem;
   cursor: pointer;
-  
 }
 .contain{
   width: 100%;

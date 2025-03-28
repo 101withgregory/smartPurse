@@ -5,8 +5,8 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
 
-  // Save token to localStorage when it changes
   useEffect(() => {
+    console.log("AuthContext → Current token state:", token); // ✅ Check token value
     if (token) {
       localStorage.setItem("token", token);
     } else {
@@ -14,14 +14,16 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token]);
 
-  // Function to handle login
   const login = (newToken) => {
+    console.log("AuthContext → Login token received:", newToken);
     setToken(newToken);
+    localStorage.setItem("token", newToken);
   };
 
-  // Function to handle logout
   const logout = () => {
+    console.log("AuthContext → Logging out");
     setToken(null);
+    localStorage.removeItem("token");
   };
 
   return (

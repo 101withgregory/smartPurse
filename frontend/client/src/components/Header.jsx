@@ -34,8 +34,11 @@ const Header = () => {
             <a href="contact">Contact</a>
           </li>
           <li>
+            <a href="my_kitties">My Kitties</a>
+          </li>
+          <li>
             <a
-              href="track-progress"
+              href="/kitty"
               style={{ display: "flex", alignItems: "center", gap: "5px" }}
             >
               <span

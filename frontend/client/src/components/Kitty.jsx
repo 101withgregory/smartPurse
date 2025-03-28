@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const Kitty = () => {
   const navigate = useNavigate();
+  const [kittyEmail, setKittyEmail] = useState("");
   const [kittyName, setKittyName] = useState("");
   const [kittyDescription, setKittyDescription] = useState("");
   const [kittyType, setKittyType] = useState("Rotating Savings");
@@ -36,6 +37,16 @@ const Kitty = () => {
         <h3 className="text-center text-primary">Create a Kitty</h3>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
+            <label className="form-label">Kitty Email</label>
+            <input
+              type="text"
+              className="form-control"
+              value={kittyEmail}
+              onChange={(e) => setKittyEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-3">
             <label className="form-label">Kitty Name</label>
             <input
               type="text"
@@ -63,10 +74,8 @@ const Kitty = () => {
               onChange={(e) => setKittyType(e.target.value)}
               required
             >
-              <option value="Rotating Savings">Rotating Savings (ROSCA)</option>
-              <option value="Fixed Savings">
-                Fixed Savings (Fixed Contributions with Payout at End)
-              </option>
+              <option value="Rotating Savings">Rotating Savings</option>
+              <option value="Fixed Savings">Fixed Savings</option>
               <option value="Flexible Contributions">
                 Flexible Contributions
               </option>

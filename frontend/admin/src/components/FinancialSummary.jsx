@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FiTrendingUp, FiClock, FiAlertTriangle } from "react-icons/fi";
-import dashboardSummaryService from "../services/dashboardSummaryService"; // ✅ Use the correct service
+import dashboardSummaryService from "../services/dashboardSummaryService";
 
 const FinancialSummary = () => {
   const [summary, setSummary] = useState({
@@ -12,7 +12,7 @@ const FinancialSummary = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await dashboardSummaryService.getDashboardSummary(); // ✅ Fetch from service
+        const data = await dashboardSummaryService.getDashboardSummary();
         setSummary(data);
       } catch (error) {
         console.error("Error fetching financial summary:", error);
@@ -24,7 +24,7 @@ const FinancialSummary = () => {
 
   return (
     <div className="financial-summary">
-      {/* ✅ Total Funds */}
+      {/* Total Funds */}
       <div className="card p-4 bg-white shadow rounded-lg flex items-center flex-col justify-center">
         <FiTrendingUp size={24} className="text-green-500" />
         <div className="flex-col flex gap-3">
@@ -35,7 +35,7 @@ const FinancialSummary = () => {
         </div>
       </div>
 
-      {/* ✅ Pending Transactions */}
+      {/* Pending Transactions */}
       <div className="card p-4 bg-white shadow rounded-lg flex items-center flex-col justify-center">
         <FiClock size={24} className="text-yellow-500" />
         <div className="flex-col flex gap-3">
@@ -46,7 +46,7 @@ const FinancialSummary = () => {
         </div>
       </div>
 
-      {/* ✅ Flagged Anomalies */}
+      {/* Flagged Anomalies */}
       <div className="card p-4 bg-white shadow rounded-lg flex items-center flex-col justify-center">
         <FiAlertTriangle size={24} className="text-red-500" />
         <div className="flex-col flex gap-3">

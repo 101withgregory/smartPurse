@@ -1,40 +1,31 @@
-/* Navbar.css */
-* {
-  box-sizing: border-box;
-}
-
-/* .containerB {
-  background-color: #01327b;
-  padding: 0.3rem 2rem;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-} */
-
 .navbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  justify-content: space-between;
+  padding: 2rem 4rem;
   background-color: #058fc3;
   color: #fff;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000; /* Ensure the navbar is above other elements */
+  z-index: 1000;
 }
 
 .navbar-logo {
   font-size: 1.4rem;
   font-weight: bold;
   color: #fff;
-  flex: 1;
+  margin-right: auto;
+  margin-left: 20px;
 }
 
 .navbar-links {
   display: flex;
   list-style: none;
   gap: 1.5rem;
-  margin-left: auto;
+  margin-left: auto; /* Pushes links to the right but keeps spacing */
+  padding-right: 1rem; /* Adds padding to prevent it from touching the edge */
   transition: transform 0.3s ease-in-out;
 }
 
@@ -60,7 +51,6 @@
   width: 0%;
   height: 2px;
   background-color: #00c6ff;
-  /* background-color: #ff9800; */
   transition: width 0.3s ease-in-out;
 }
 
@@ -79,7 +69,7 @@
 }
 
 .menu-toggle.open .menu-icon {
-  transform: rotate(90deg); /* Rotate the icon when open */
+  transform: rotate(90deg);
 }
 
 .navbar-links.open {
@@ -87,6 +77,10 @@
 }
 
 @media (max-width: 768px) {
+  .navbar {
+    padding: 1rem;
+  }
+
   .navbar-links {
     display: none;
     flex-direction: column;

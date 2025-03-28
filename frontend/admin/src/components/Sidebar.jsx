@@ -21,7 +21,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
     <aside className={`sidebar ${isCollapsed ? "collapsed" : ""} relative overflow-y-scroll p-2 overflow-x-hidden flex flex-col justify-around`}>
       <div className="sidebar-header flex justify-between items-center">
         {!isCollapsed && (
-          <h2 className="vaultfund-logo">Vault<span className="text-blue-500">Fund</span></h2>
+          <h2 className="vaultfund-logo">Smart<span className="text-blue-500">Purse</span></h2>
         )}
         <button 
           onClick={() => setIsCollapsed(!isCollapsed)} 

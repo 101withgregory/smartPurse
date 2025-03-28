@@ -3,7 +3,6 @@ const {
   createTransaction,
   getAllTransactions,
   getTransactionById,
-  updateTransaction,
   deleteTransaction,
   flagTransaction,
   unflagTransaction,
@@ -23,8 +22,7 @@ router.get("/flagged", protect, admin, getFlaggedTransactions); // Admin can vie
 router.get("/:id", protect, getTransactionById); // User/Admin can view a specific transaction
 
 // Update & Delete (Protected)
-router.put("/:id", protect, updateTransaction);
-router.put("/:id/status", protect, admin, updateTransactionStatus); // Admin can update transaction status
+router.put("/:id/status", protect,admin, updateTransactionStatus);// Admin can update transaction status
 router.put("/:id/flag", protect, admin, flagTransaction); // Admin can flag a transaction
 router.put("/:id/unflag", protect, admin, unflagTransaction); // Admin can unflag a transaction
 router.delete("/:id", protect, admin, deleteTransaction); // Admin can delete a transaction
