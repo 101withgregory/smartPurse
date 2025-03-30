@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router();
 const {
   createTransaction,
   getAllTransactions,
@@ -10,9 +11,6 @@ const {
   updateTransactionStatus,
 } = require("../controllers/transactionController.js");
 const { protect, admin } = require("../middlewares/authMiddleware");
-
-const router = express.Router();
-
 // Public Routes (if users can create transactions)
 router.post("/", protect, createTransaction);
 
@@ -26,5 +24,6 @@ router.put("/:id/status", protect,admin, updateTransactionStatus);// Admin can u
 router.put("/:id/flag", protect, admin, flagTransaction); // Admin can flag a transaction
 router.put("/:id/unflag", protect, admin, unflagTransaction); // Admin can unflag a transaction
 router.delete("/:id", protect, admin, deleteTransaction); // Admin can delete a transaction
+
 
 module.exports = router;

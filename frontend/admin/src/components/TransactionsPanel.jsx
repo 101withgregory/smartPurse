@@ -5,6 +5,7 @@ import { FaFlag, FaUndo, FaTrash, FaCheckCircle, FaTimesCircle } from "react-ico
 import Swal from "sweetalert2";
 import transactionService from "../services/transactionService";
 import { ClipLoader } from "react-spinners";
+import ExportButtons from "./ExportBtns";
 
 const TransactionsPanel = () => {
   const [transactions, setTransactions] = useState([]);
@@ -205,8 +206,11 @@ const TransactionsPanel = () => {
   ];
 
   return (
-    <div className="p-6 bg-white shadow-md rounded-lg">
+    <div className="padding bg-white shadow-md rounded-lg">
       {/* Search and Filter */}
+      <div className="my-1">
+          <ExportButtons/>
+        </div>
       <div className="flex justify-between mb-4">
         <input
           type="text"
@@ -227,7 +231,7 @@ const TransactionsPanel = () => {
           <option value="REVERSAL">Reversal</option>
         </select>
       </div>
-
+        
       {/* Data Table */}
       {loading ? (
         <div className="flex justify-center"><ClipLoader color="#3b82f6" loading={loading} size={40} /></div>

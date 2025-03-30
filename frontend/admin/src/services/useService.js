@@ -1,6 +1,6 @@
 const API_URL = "http://localhost:5000/api/users"; // Backend route for users
 
-// ✅ 1. Fetch Users
+// 1. Fetch Users
 export const fetchUsers = async (token) => {
   try {
     const response = await fetch(API_URL, {
@@ -18,7 +18,7 @@ export const fetchUsers = async (token) => {
   }
 };
 
-// ✅ 2. Add New User
+// 2. Add New User
 export const addUser = async (token, data) => {
   try {
     const response = await fetch(API_URL, {
@@ -37,7 +37,7 @@ export const addUser = async (token, data) => {
   }
 };
 
-// ✅ 3. Update User
+//  3. Update User
 export const updateUser = async (token, userId, data) => {
   try {
     const response = await fetch(`${API_URL}/${userId}`, {

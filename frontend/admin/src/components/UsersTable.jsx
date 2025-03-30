@@ -21,6 +21,7 @@ const UserTable = () => {
     firstName: "",
     lastName: "",
     email: "",
+    password:"",
     role: "Member",
   });
 
@@ -57,6 +58,7 @@ const UserTable = () => {
         firstName: "",
         lastName: "",
         email: "",
+        password:'',
         role: "Member",
       });
     }
@@ -150,6 +152,7 @@ const UserTable = () => {
       name: "Actions",
       cell: (row) => (
         <>
+        <div className="flex items-center justify-center gap-2">
           <button
             onClick={() => openModal(row)}
             className="bg-blue-500 text-white sc-btn rounded hover:bg-blue-600 transition"
@@ -162,6 +165,8 @@ const UserTable = () => {
           >
             Delete
           </button>
+        </div>
+          
         </>
       ),
     },
@@ -201,40 +206,62 @@ const UserTable = () => {
           className="fixed inset-0 bg-black/50 flex items-center justify-center"
           onClick={closeModal}
         >
-          <form
-            onSubmit={handleSubmit}
-            className="bg-white padding rounded-lg shadow-md w-96"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="text-xl font-semibold mb-4">
-              {editUser ? "Edit User" : "Add User"}
-            </h2>
-            {["firstName", "lastName", "email"].map((field) => (
-              <input
-                key={field}
-                name={field}
-                value={formData[field]}
-                onChange={handleChange}
-                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-                type="text"
-                className="w-full p-2 border rounded mb-3"
-                required
-              />
-            ))}
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              className="w-full p-2 border rounded mb-3"
-            >
-              <option value="Admin">Admin</option>
-              <option value="Member">Member</option>
-            </select>
-            <div className="flex justify-end gap-3">
-              <button type="button" onClick={closeModal} className="bg-gray-300 text-black sc-btn rounded">Cancel</button>
-              <button className="bg-green-500 text-white sc-btn  rounded">Save</button>
-            </div>
-          </form>
+         <form
+  onSubmit={handleSubmit}
+  className="bg-white padding rounded-lg shadow-md w-96"
+  onClick={(e) => e.stopPropagation()}
+>
+  <h2 className="text-xl font-semibold mb-4">
+    {editUser ? "Edit User" : "Add User"}
+  </h2>
+  {["firstName", "lastName", "email"].map((field) => (
+    <input
+      key={field}
+      name={field}
+      value={formData[field]}
+      onChange={handleChange}
+      placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+      type="text"
+      className="w-full p-2 border rounded mb-3"
+      required
+    />
+  ))}
+
+  {/* Password Input */}
+  <input
+    name="password"
+    value={formData.password || ""} // Handle missing password field
+    onChange={handleChange}
+    placeholder="Password"
+    type="password"
+    className="w-full p-2 border rounded mb-3"
+    required // Make it required only for adding a user
+  />
+
+  <select
+    name="role"
+    value={formData.role}
+    onChange={handleChange}
+    className="w-full p-2 border rounded mb-3"
+  >
+    <option value="Admin">Admin</option>
+    <option value="Member">Member</option>
+  </select>
+
+  <div className="flex justify-end gap-3">
+    <button
+      type="button"
+      onClick={closeModal}
+      className="bg-gray-300 text-black sc-btn rounded"
+    >
+      Cancel
+    </button>
+    <button className="bg-green-500 text-white sc-btn rounded">
+      Save
+    </button>
+  </div>
+</form>
+
         </div>
       )}
     </div>

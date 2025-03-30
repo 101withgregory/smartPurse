@@ -35,6 +35,8 @@ const paymentRoutes = require("./routes/paymentRoutes");
 app.use("/api/payments", paymentRoutes);
 const anomalyRoutes = require('./routes/anomalyRoutes')
 app.use('/api/anomalies', anomalyRoutes)
+const exportRoutes = require('./routes/exportRoutes');
+app.use('/api/export', exportRoutes);
 
 
 // Start Server
