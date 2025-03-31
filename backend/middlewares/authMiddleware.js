@@ -12,10 +12,10 @@ const protect = asyncHandler(async (req, res, next) => {
   ) {
     try {
       token = req.headers.authorization.split(" ")[1];
-      console.log("Token received:", token); // ✅ Check if token is being received
+      console.log("Token received:", token); // heck if token is being received
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log("Decoded token:", decoded); // ✅ Check if token is valid
+      console.log("Decoded token:", decoded); // Check if token is valid
 
       req.user = await User.findById(decoded.id).select("-password");
 
@@ -26,7 +26,7 @@ const protect = asyncHandler(async (req, res, next) => {
 
       next();
     } catch (error) {
-      console.error("Token verification failed:", error.message); // ✅ Log any verification errors
+      console.error("Token verification failed:", error.message); // Log any verification errors
       res.status(401);
       throw new Error("Not authorized, invalid token");
     }
@@ -41,7 +41,7 @@ const protect = asyncHandler(async (req, res, next) => {
 
 // Middleware to check admin role
 const admin = (req, res, next) => {
-  if (req.user && req.user.role === "admin") {
+  if (req.user && req.user.role === "superAdmin") {
     next();
   } else {
     res.status(403);

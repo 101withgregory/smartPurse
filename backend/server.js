@@ -25,8 +25,6 @@ const userRoutes = require('./routes/userRoutes');
 app.use('/api/users', userRoutes);
 const kittyRoutes = require("./routes/kittyRoutes");
 app.use("/api/kittys", kittyRoutes);
-const groupRoutes = require('./routes/groupRoutes');
-app.use('/api/groups', groupRoutes);
 const dashboardRoutes = require("./routes/dashboardRoutes");
 app.use("/api/dashboard", dashboardRoutes);
 const transactionRoutes = require('./routes/transactionRoutes')

@@ -13,7 +13,6 @@ with open('./ml_model/random_forest_model.pkl', 'rb') as file:
 with open('./ml_model/scaler.pkl', 'rb') as f:
     scaler = pickle.load(f)
 
-# Fit scaler using dummy data
 sample_data = np.random.rand(1, 15).astype(np.float32)
 scaler.fit(sample_data)
 
@@ -21,9 +20,10 @@ scaler.fit(sample_data)
 def predict():
     try:
         data = request.get_json()
+        amount = data['amount']
 
         input_data = np.array([
-            data['amount'],
+            amount,
             data['oldbalanceOrg'],
             data['newbalanceOrig'],
             data['oldbalanceDest'],
@@ -40,20 +40,17 @@ def predict():
             data['accountDest']
         ]).reshape(1, -1).astype(np.float32)
 
-        # ✅ Scale input
         input_data = scaler.transform(input_data)
-
-        # ✅ Predict probability using model
         probability = loaded_model.predict_proba(input_data)[0][1]
 
-        # ✅ Improved risk score calculation
-        base_score = (probability * 0.5) + (np.log1p(data['amount']) * 0.00005) + (data['balance_change_ratio'] * 0.3)
+        # Base risk score calculation
+        base_score = (probability * 0.5) + (np.log1p(amount) * 0.00005) + (data['balance_change_ratio'] * 0.3)
 
-        # ✅ Add realistic randomness for variation
-        if base_score >= 70:
-            base_score += random.uniform(-8, 8)  # Vary between -8% to +8%
+        # Introduce randomness for high-value transactions
+        if amount >= 800000:
+            base_score += random.uniform(5, 15)  # Vary between +5% to +15%
 
-        # ✅ Cap risk score in the correct range
+        # Ensure risk score is within realistic bounds
         risk_score = round(min(max(base_score * 100, 60), 95), 2)
 
         return jsonify({"riskScore": risk_score})

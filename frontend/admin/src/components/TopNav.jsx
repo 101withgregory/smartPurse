@@ -28,10 +28,10 @@ const TopNav = () => {
       <div className="topnav-right flex items-center gap-8">
         <NotificationBell />
 
-        {/* Settings Icon */}
+        {/* Settings Icon
         <button className="icon-btn text-2xl hover:text-gray-400 cursor-pointer">
           <FiSettings />
-        </button>
+        </button> */}
 
         {/* Profile Icon */}
         <div className="profile flex flex-col items-center hover:text-gray-400 cursor-pointer">

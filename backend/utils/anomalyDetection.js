@@ -58,13 +58,13 @@ exports.detectAnomalies = async (transactionId) => {
 
       console.log(`Predicted Risk Score: ${riskScore}`);
 
-      // ✅ Save risk score to transaction
+      // Save risk score to transaction
       transaction.riskScore = riskScore;
-      transaction.isFlagged = riskScore >= 60;
+      transaction.isFlagged = true;
       transaction.flagReason = riskScore >= 60 ? "High risk score detected" : "Low risk score";
       await transaction.save();
 
-      // ✅ Save anomaly if flagged
+      // Save anomaly if flagged
       if (riskScore >= 60) {
         const anomaly = new Anomaly({
           transactionId,
@@ -85,7 +85,7 @@ exports.detectAnomalies = async (transactionId) => {
   }
 };
 
-// ✅ Helper function
+// Helper function
 function encodePhoneNumber(phone) {
   return phone ? parseInt(phone.replace(/[^0-9]/g, "")) || 0 : 0;
 }

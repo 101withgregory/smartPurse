@@ -21,7 +21,7 @@ export const fetchUsers = async (token) => {
 // 2. Add New User
 export const addUser = async (token, data) => {
   try {
-    const response = await fetch(API_URL, {
+    const response = await fetch(`${API_URL}/register`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -56,7 +56,7 @@ export const updateUser = async (token, userId, data) => {
   }
 };
 
-// ✅ 4. Delete User
+// 4. Delete User
 export const deleteUser = async (token, userId) => {
   try {
     const response = await fetch(`${API_URL}/${userId}`, {
@@ -74,7 +74,7 @@ export const deleteUser = async (token, userId) => {
   }
 };
 
-// ✅ 5. Get Single User
+// 5. Get Single User
 export const getUserById = async (token, userId) => {
   try {
     const response = await fetch(`${API_URL}/${userId}`, {

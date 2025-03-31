@@ -3,6 +3,7 @@ const Transaction = require("../models/transactionModel");
 const Kitty = require("../models/kittyModel");
 const { detectAnomalies } = require("../utils/anomalyDetection");
 const Anomaly = require("../models/Anomaly");
+const User = require("../models/userModel");
 
 // Create a new transaction
 const createTransaction = asyncHandler(async (req, res) => { 
@@ -55,7 +56,7 @@ const createTransaction = asyncHandler(async (req, res) => {
 
   console.log(`Transaction created with amount: ${amount}`);
 
-  // ✅ Trigger anomaly detection if amount >= 800,000
+  // Trigger anomaly detection if amount >= 800,000
   if (amount >= 800000) {
     console.log("High risk amount detected — triggering anomaly detection");
     detectAnomalies(transaction._id);
@@ -85,7 +86,7 @@ const getAllTransactions = asyncHandler(async (req, res) => {
   res.status(200).json(transactions);
 });
 
-// ✅ Get a transaction by ID
+// Get a transaction by ID
 const getTransactionById = asyncHandler(async (req, res) => {
   const transaction = await Transaction.findById(req.params.id)
     .populate("user", "name email")
@@ -115,32 +116,46 @@ const updateTransactionStatus = asyncHandler(async (req, res) => {
     throw new Error("Cannot update a flagged transaction");
   }
 
-  // Prevent double processing for approved transactions
-  if (transaction.status === 'approved' && status === 'approved') {
-    res.status(400).json({message:"Transaction is already approved"});
+  // Prevent double processing for approved/rejected transactions
+  if (transaction.status === status) {
+    res.status(400).json({ message: `Transaction is already ${status}` });
+    return;
   }
 
-  if (transaction.status === 'rejected' && status === 'rejected') {
-    res.status(400).json({message:"Transaction is already rejected"});
-  }
-
-  // ✅ Handle balance adjustment ONLY when transitioning from 'pending'
   const kitty = await Kitty.findById(transaction.kittyId);
   if (kitty) {
     if (transaction.status === 'pending' && status === 'approved') {
-      kitty.totalAmount += transaction.amount;
+      // Increase kitty balance ONLY when moving from 'pending' to 'approved'
+      kitty.totalAmount += Math.abs(transaction.amount);
     } else if (transaction.status === 'approved' && status === 'rejected') {
-      kitty.totalAmount -= transaction.amount;
+      // Reduce balance ONLY if transaction was already approved before
+      kitty.totalAmount = Math.max(kitty.totalAmount - Math.abs(transaction.amount), 0);
     }
     await kitty.save();
   }
 
-  // ✅ Update the status only if it’s changing
+  // Update the status only if it’s changing
   transaction.status = status;
   await transaction.save();
 
+  // Get the user's email
+  const user = await User.findById(transaction.user);
+  if (user && user.email) {
+    let emailSubject = `Transaction ${status}`;
+    let emailText = `Hello ${user.firstName},\n\nYour transaction with amount KES ${transaction.amount} has been ${status}.\n\nThank you for using VaultFund.`;
+
+    if (transaction.isFlagged) {
+      emailSubject = "Transaction Flagged for Review";
+      emailText = `Hello ${user.firstName},\n\nYour transaction with amount KES ${transaction.amount} has been flagged for review. Please contact support if needed.`;
+    }
+
+    // Send email
+    await sendEmail(user.email, emailSubject, emailText);
+  }
+
   res.status(200).json(transaction);
 });
+
 
 
 
@@ -154,20 +169,32 @@ const deleteTransaction = asyncHandler(async (req, res) => {
     throw new Error("Transaction not found");
   }
 
-  // Remove transaction from the associated kitty
+  // Prevent deleting approved transactions
+  if (transaction.status === "approved") {
+    res.status(400);
+    throw new Error("Cannot delete an approved transaction");
+  }
+
+  // Find the associated kitty
   const kitty = await Kitty.findById(transaction.kittyId);
   if (kitty) {
-    kitty.transactions = kitty.transactions.filter(
-      (id) => id.toString() !== transaction._id.toString()
-    );
-    kitty.totalAmount -= transaction.amount;
+    // Remove transaction from kitty's transactions array safely
+    if (kitty.transactions?.length) {
+      kitty.transactions = kitty.transactions.filter(
+        (id) => id.toString() !== transaction._id.toString()
+      );
+    }
+
     await kitty.save();
   }
 
-  await transaction.deleteOne();
+  // Delete the transaction
+  await Transaction.findByIdAndDelete(transaction._id);
 
-  res.status(200).json({ message: "Transaction deleted" });
+  res.status(200).json({ message: "Transaction deleted successfully" });
 });
+
+
 
 // Flag a transaction
 const flagTransaction = asyncHandler(async (req, res) => {
@@ -179,12 +206,12 @@ const flagTransaction = asyncHandler(async (req, res) => {
     throw new Error("Transaction not found");
   }
 
-  // ✅ Flag transaction
+  //Flag transaction
   transaction.isFlagged = true;
   transaction.flagReason = flagReason || "Flagged manually by admin";
   await transaction.save();
 
-  // ✅ Create anomaly document
+  // Create anomaly document
   const anomaly = new Anomaly({
     transactionId: transaction._id,
     riskScore: transaction.riskScore || 0, // Use current risk score if available
@@ -208,12 +235,12 @@ const unflagTransaction = asyncHandler(async (req, res) => {
     throw new Error("Transaction not found");
   }
 
-  // ✅ Unflag the transaction
+  // Unflag the transaction
   transaction.isFlagged = false;
   transaction.flagReason = "";
   await transaction.save();
 
-  // ✅ Remove corresponding anomaly entry
+  // Remove corresponding anomaly entry
   await Anomaly.deleteOne({ transactionId: transaction._id });
 
   console.log(`Anomaly removed for transaction ${transaction._id}`);

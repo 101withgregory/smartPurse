@@ -39,7 +39,7 @@ const TransactionSchema = new mongoose.Schema(
     accountOrig: { type: Number },
     accountDest: { type: Number }, 
 
-    riskScore: { type: Number, default: 0 },
+    riskScore: { type: Number, default: 10 },
     isFlagged: { type: Boolean, default: false },
     flagReason: { type: String, default: "" },
   },

@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Transaction = require("../models/transactionModel");
 const Kitty = require("../models/kittyModel");
 
-// ✅ Initiate payment (Generate Payment Link)
+// Initiate payment (Generate Payment Link)
 const initiatePayment = asyncHandler(async (req, res) => {
   const { kittyId, amount, senderPhone, mpesaReference } = req.body;
 
@@ -33,7 +33,7 @@ const initiatePayment = asyncHandler(async (req, res) => {
   res.status(200).json({ paymentUrl });
 });
 
-// ✅ Handle Payment Confirmation (M-Pesa Callback)
+// Handle Payment Confirmation (M-Pesa Callback)
 const confirmPayment = asyncHandler(async (req, res) => {
   const { ref, status, amount } = req.body;
 

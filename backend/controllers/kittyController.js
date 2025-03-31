@@ -7,43 +7,68 @@ const mongoose = require('mongoose');
 const createKitty = asyncHandler(async (req, res) => {
   const {
     kittyName,
-    kittyEmail, // New field
-    kittyAddress, // New field
-    kittyAmount, // New field
+    kittyEmail,
+    kittyAddress,
+    kittyAmount,
     kittyDescription,
     kittyType,
     beneficiaryNumber,
     maturityDate,
   } = req.body;
 
-  const kittyExists = await Kitty.findOne({ kittyName });
+  // ✅ Ensure maturity date is valid
+  const parsedMaturityDate = new Date(maturityDate);
+  if (isNaN(parsedMaturityDate)) {
+    res.status(400);
+    throw new Error("Invalid maturity date");
+  }
+
+  // ✅ Ensure case-insensitive uniqueness
+  const kittyExists = await Kitty.findOne({
+    kittyName: { $regex: new RegExp(`^${kittyName}$`, "i") }
+  });
+
   if (kittyExists) {
     res.status(400);
     throw new Error("Kitty already exists");
   }
 
-  const contributionLink = `${process.env.FRONTEND_URL}/contribute/${new mongoose.Types.ObjectId()}`;
-
+  // ✅ Create Kitty
   const kitty = await Kitty.create({
     kittyName,
-    kittyEmail, // Include in creation
-    kittyAddress, // Include in creation
-    kittyAmount: kittyAmount || 0, // Default to 0 if not provided
+    kittyEmail,
+    kittyAddress,
+    kittyAmount: kittyAmount || 0,
     kittyDescription,
     kittyType,
     beneficiaryNumber,
-    maturityDate,
-    contributionLink,
-    createdBy: req.user._id, 
+    maturityDate: parsedMaturityDate,
+    createdBy: req.user._id,
   });
 
-  if (kitty) {
-    res.status(201).json(kitty);
-  } else {
-    res.status(400);
-    throw new Error("Invalid kitty data");
-  }
+  // ✅ Update with correct `contributionLink`
+  kitty.contributionLink = `${process.env.FRONTEND_URL}/contribute/${kitty._id}`;
+  await kitty.save();
+
+  // ✅ Structured response
+  res.status(201).json({
+    message: "Kitty created successfully",
+    kitty: {
+      id: kitty._id,
+      kittyName: kitty.kittyName,
+      kittyEmail: kitty.kittyEmail,
+      kittyAddress: kitty.kittyAddress,
+      kittyAmount: kitty.kittyAmount,
+      kittyDescription: kitty.kittyDescription,
+      kittyType: kitty.kittyType,
+      beneficiaryNumber: kitty.beneficiaryNumber,
+      maturityDate: kitty.maturityDate,
+      contributionLink: kitty.contributionLink,
+      createdBy: kitty.createdBy,
+    }
+  });
 });
+
 
 const editKitty = asyncHandler(async (req, res) => {
   const { 

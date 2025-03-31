@@ -21,6 +21,7 @@ const UserTable = () => {
     firstName: "",
     lastName: "",
     email: "",
+    phone:"",
     password:"",
     role: "Member",
   });
@@ -58,6 +59,7 @@ const UserTable = () => {
         firstName: "",
         lastName: "",
         email: "",
+        phone:"",
         password:'',
         role: "Member",
       });
@@ -147,6 +149,7 @@ const UserTable = () => {
     { name: "First Name", selector: (row) => row.firstName, sortable: true },
     { name: "Last Name", selector: (row) => row.lastName, sortable: true },
     { name: "Email", selector: (row) => row.email, sortable: true },
+    { name: "Telephone", selector: (row) => row.phone, sortable: true },
     { name: "Role", selector: (row) => row.role, sortable: true },
     {
       name: "Actions",
@@ -206,7 +209,7 @@ const UserTable = () => {
           className="fixed inset-0 bg-black/50 flex items-center justify-center"
           onClick={closeModal}
         >
-         <form
+ <form
   onSubmit={handleSubmit}
   className="bg-white padding rounded-lg shadow-md w-96"
   onClick={(e) => e.stopPropagation()}
@@ -214,6 +217,7 @@ const UserTable = () => {
   <h2 className="text-xl font-semibold mb-4">
     {editUser ? "Edit User" : "Add User"}
   </h2>
+
   {["firstName", "lastName", "email"].map((field) => (
     <input
       key={field}
@@ -227,16 +231,31 @@ const UserTable = () => {
     />
   ))}
 
-  {/* Password Input */}
+  {/* Phone Number Input */}
   <input
-    name="password"
-    value={formData.password || ""} // Handle missing password field
+    name="phone"
+    value={formData.phone || ""}
     onChange={handleChange}
-    placeholder="Password"
-    type="password"
+    placeholder="Phone Number"
+    type="tel"
+    pattern="^\+?\d{10,15}$"
+    title="Enter a valid phone number"
     className="w-full p-2 border rounded mb-3"
-    required // Make it required only for adding a user
+    required
   />
+
+  {/* Password Input (Shown only when adding a new user) */}
+  {!editUser && (
+    <input
+      name="password"
+      value={formData.password || ""}
+      onChange={handleChange}
+      placeholder="Password"
+      type="password"
+      className="w-full p-2 border rounded mb-3"
+      required
+    />
+  )}
 
   <select
     name="role"
@@ -244,6 +263,7 @@ const UserTable = () => {
     onChange={handleChange}
     className="w-full p-2 border rounded mb-3"
   >
+    <option value="superAdmin">superAdmin</option>
     <option value="Admin">Admin</option>
     <option value="Member">Member</option>
   </select>
@@ -261,6 +281,8 @@ const UserTable = () => {
     </button>
   </div>
 </form>
+
+
 
         </div>
       )}
