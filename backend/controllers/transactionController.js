@@ -4,6 +4,7 @@ const Kitty = require("../models/kittyModel");
 const { detectAnomalies } = require("../utils/anomalyDetection");
 const Anomaly = require("../models/Anomaly");
 const User = require("../models/userModel");
+const sendEmail = require("../utils/sendEmail");
 
 // Create a new transaction
 const createTransaction = asyncHandler(async (req, res) => { 
@@ -142,7 +143,7 @@ const updateTransactionStatus = asyncHandler(async (req, res) => {
   const user = await User.findById(transaction.user);
   if (user && user.email) {
     let emailSubject = `Transaction ${status}`;
-    let emailText = `Hello ${user.firstName},\n\nYour transaction with amount KES ${transaction.amount} has been ${status}.\n\nThank you for using VaultFund.`;
+    let emailText = `Hello ${user.firstName},\n\nYour transaction with amount KES ${transaction.amount} has been ${status}.\n\nThank you for using SmartPurse.`;
 
     if (transaction.isFlagged) {
       emailSubject = "Transaction Flagged for Review";

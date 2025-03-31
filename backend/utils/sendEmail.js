@@ -8,6 +8,9 @@ const sendEmail = async (to, subject, text) => {
         user: process.env.EMAIL_USER, // Your email address
         pass: process.env.EMAIL_PASS, // Your email app password
       },
+      tls: {
+        rejectUnauthorized: false, // Ignore self-signed certificate issues
+      },
     });
 
     const mailOptions = {

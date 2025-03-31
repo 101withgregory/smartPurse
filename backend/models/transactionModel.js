@@ -21,7 +21,7 @@ const TransactionSchema = new mongoose.Schema(
     merchantCode: { type: String },
     transactionTime: { type: Date, default: Date.now },
     charges: { type: Number },
-
+     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
     // Balance Tracking
     oldbalanceOrg: { type: Number },
     newbalanceOrig: { type: Number },
