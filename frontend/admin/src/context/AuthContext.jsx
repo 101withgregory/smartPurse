@@ -6,7 +6,6 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
 
   useEffect(() => {
-    console.log("AuthContext → Current token state:", token); // ✅ Check token value
     if (token) {
       localStorage.setItem("token", token);
     } else {
@@ -15,13 +14,11 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   const login = (newToken) => {
-    console.log("AuthContext → Login token received:", newToken);
     setToken(newToken);
     localStorage.setItem("token", newToken);
   };
 
   const logout = () => {
-    console.log("AuthContext → Logging out");
     setToken(null);
     localStorage.removeItem("token");
   };
@@ -34,9 +31,22 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+  const { token,login, logout } = useContext(AuthContext);
+
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1])); // Decode JWT
+      if (payload.exp * 1000 < Date.now()) {
+        logout(); // Expired, force logout
+        return { token: null };
+      }
+    } catch (error) {
+      console.error("Invalid token:", error);
+      logout();
+      return { token: null };
+    }
   }
-  return context;
+
+  return { token, logout, login };
 };
+

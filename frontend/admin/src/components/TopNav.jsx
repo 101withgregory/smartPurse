@@ -42,7 +42,7 @@ const TopNav = () => {
         {/* Logout Button */}
         <button 
           onClick={handleLogout} 
-          className="flex items-center gap-1 text-gray-600 hover:text-red-400 text-[18px] cursor-pointer">
+          className="flex items-center bg-blue-500 sc-btn gap-1 text-white hover:text-red-400 text-[18px] cursor-pointer rounded-lg">
           <FiLogOut />
           Logout
         </button>

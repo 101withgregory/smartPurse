@@ -13,9 +13,6 @@ with open('./ml_model/random_forest_model.pkl', 'rb') as file:
 with open('./ml_model/scaler.pkl', 'rb') as f:
     scaler = pickle.load(f)
 
-sample_data = np.random.rand(1, 15).astype(np.float32)
-scaler.fit(sample_data)
-
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
@@ -43,17 +40,21 @@ def predict():
         input_data = scaler.transform(input_data)
         probability = loaded_model.predict_proba(input_data)[0][1]
 
-        # Base risk score calculation
+        # Restore original risk score logic
         base_score = (probability * 0.5) + (np.log1p(amount) * 0.00005) + (data['balance_change_ratio'] * 0.3)
 
-        # Introduce randomness for high-value transactions
-        if amount >= 800000:
-            base_score += random.uniform(5, 15)  # Vary between +5% to +15%
+        # Allow high variations for large transactions
+        if amount >= 500000:
+            base_score += random.uniform(5, 50)  
 
-        # Ensure risk score is within realistic bounds
-        risk_score = round(min(max(base_score * 100, 60), 95), 2)
+        # No clamping, restore original behavior
+        risk_score = base_score * 100  
 
-        return jsonify({"riskScore": risk_score})
+        # Ensure risk score is always an odd number with decimals
+        if int(risk_score) % 2 == 0:
+            risk_score += random.uniform(1.01, 1.99)  # Adjust to odd number
+
+        return jsonify({"riskScore": round(risk_score, 5)})  # Keep five decimal places
 
     except Exception as e:
         return jsonify({"error": str(e)}), 400

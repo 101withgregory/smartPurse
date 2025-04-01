@@ -58,7 +58,7 @@ const createTransaction = asyncHandler(async (req, res) => {
   console.log(`Transaction created with amount: ${amount}`);
 
   // Trigger anomaly detection if amount >= 800,000
-  if (amount >= 800000) {
+  if (amount >= 500000) {
     console.log("High risk amount detected — triggering anomaly detection");
     detectAnomalies(transaction._id);
   }
@@ -142,24 +142,19 @@ const updateTransactionStatus = asyncHandler(async (req, res) => {
   // Get the user's email
   const user = await User.findById(transaction.user);
   if (user && user.email) {
-    let emailSubject = `Transaction ${status}`;
-    let emailText = `Hello ${user.firstName},\n\nYour transaction with amount KES ${transaction.amount} has been ${status}.\n\nThank you for using SmartPurse.`;
+    let emailSubject = `Contribution ${status}`;
+    let emailText = `Hello ${user.firstName},\n\nYour contribution with amount KES ${transaction.amount} has been ${status}.\n\nThank you for using SmartPurse.`;
 
     if (transaction.isFlagged) {
       emailSubject = "Transaction Flagged for Review";
-      emailText = `Hello ${user.firstName},\n\nYour transaction with amount KES ${transaction.amount} has been flagged for review. Please contact support if needed.`;
+      emailText = `Hello ${user.firstName},\n\nYour contribution with amount KES ${transaction.amount} has been flagged for review. Please contact support if needed.`;
     }
-
     // Send email
     await sendEmail(user.email, emailSubject, emailText);
   }
 
   res.status(200).json(transaction);
 });
-
-
-
-
 
 // Delete a transaction
 const deleteTransaction = asyncHandler(async (req, res) => {
@@ -176,18 +171,19 @@ const deleteTransaction = asyncHandler(async (req, res) => {
     throw new Error("Cannot delete an approved transaction");
   }
 
-  // Find the associated kitty
+  // Find and update the associated kitty
   const kitty = await Kitty.findById(transaction.kittyId);
   if (kitty) {
-    // Remove transaction from kitty's transactions array safely
     if (kitty.transactions?.length) {
       kitty.transactions = kitty.transactions.filter(
         (id) => id.toString() !== transaction._id.toString()
       );
     }
-
     await kitty.save();
   }
+
+  // Delete transaction from the anomaly documents
+  await Anomaly.findOneAndDelete({ transactionId: transaction._id });
 
   // Delete the transaction
   await Transaction.findByIdAndDelete(transaction._id);
@@ -207,7 +203,13 @@ const flagTransaction = asyncHandler(async (req, res) => {
     throw new Error("Transaction not found");
   }
 
-  //Flag transaction
+  // Check if transaction is already flagged to prevent duplicate processing
+  if (transaction.isFlagged) {
+    res.status(400);
+    throw new Error("Transaction is already flagged.");
+  }
+
+  // Flag transaction
   transaction.isFlagged = true;
   transaction.flagReason = flagReason || "Flagged manually by admin";
   await transaction.save();
@@ -225,8 +227,19 @@ const flagTransaction = asyncHandler(async (req, res) => {
   await anomaly.save();
   console.log(`Anomaly created for transaction ${transaction._id}`);
 
+  // Send email notification to user
+  const user = await User.findById(transaction.user);
+  if (user && user.email) {
+    const emailSubject = "Transaction Flagged for Review";
+    const emailText = `Hello ${user.firstName},\n\nYour contribution with amount KES ${transaction.amount} has been flagged for review due to: ${transaction.flagReason}.\n\nPlease contact support if needed.\n\nThank you for using SmartPurse.`;
+
+    await sendEmail(user.email, emailSubject, emailText);
+    console.log(`Email sent to ${user.email} about flagged transaction.`);
+  }
+
   res.status(200).json(transaction);
 });
+
 
 // Unflag a transaction
 const unflagTransaction = asyncHandler(async (req, res) => {
@@ -234,6 +247,12 @@ const unflagTransaction = asyncHandler(async (req, res) => {
   if (!transaction) {
     res.status(404);
     throw new Error("Transaction not found");
+  }
+
+  // Check if the transaction is actually flagged before unflagging
+  if (!transaction.isFlagged) {
+    res.status(400);
+    throw new Error("Transaction is not flagged.");
   }
 
   // Unflag the transaction
@@ -246,8 +265,19 @@ const unflagTransaction = asyncHandler(async (req, res) => {
 
   console.log(`Anomaly removed for transaction ${transaction._id}`);
 
+  // Send email notification to user
+  const user = await User.findById(transaction.user);
+  if (user && user.email) {
+    const emailSubject = "Transaction Cleared";
+    const emailText = `Hello ${user.firstName},\n\nYour transaction with amount KES ${transaction.amount} has been reviewed and is no longer flagged as an anomaly.\n\nThank you for using SmartPurse.`;
+
+    await sendEmail(user.email, emailSubject, emailText);
+    console.log(`Email sent to ${user.email} about unflagged transaction.`);
+  }
+
   res.status(200).json(transaction);
 });
+
 
 // Get flagged transactions
 const getFlaggedTransactions = asyncHandler(async (req, res) => {

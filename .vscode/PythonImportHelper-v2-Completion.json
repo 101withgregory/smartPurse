@@ -288,16 +288,7 @@
         "kind": 5,
         "importPath": "backend.utils.riskScore",
         "description": "backend.utils.riskScore",
-        "peekOfCode": "app = Flask(__name__)\n# Load Pretrained Model\nwith open('./ml_model/random_forest_model.pkl', 'rb') as file:\n    loaded_model = pickle.load(file)\nwith open('./ml_model/scaler.pkl', 'rb') as f:\n    scaler = pickle.load(f)\nsample_data = np.random.rand(1, 15).astype(np.float32)\nscaler.fit(sample_data)\n@app.route('/predict', methods=['POST'])\ndef predict():",
-        "detail": "backend.utils.riskScore",
-        "documentation": {}
-    },
-    {
-        "label": "sample_data",
-        "kind": 5,
-        "importPath": "backend.utils.riskScore",
-        "description": "backend.utils.riskScore",
-        "peekOfCode": "sample_data = np.random.rand(1, 15).astype(np.float32)\nscaler.fit(sample_data)\n@app.route('/predict', methods=['POST'])\ndef predict():\n    try:\n        data = request.get_json()\n        amount = data['amount']\n        input_data = np.array([\n            amount,\n            data['oldbalanceOrg'],",
+        "peekOfCode": "app = Flask(__name__)\n# Load Pretrained Model\nwith open('./ml_model/random_forest_model.pkl', 'rb') as file:\n    loaded_model = pickle.load(file)\nwith open('./ml_model/scaler.pkl', 'rb') as f:\n    scaler = pickle.load(f)\n@app.route('/predict', methods=['POST'])\ndef predict():\n    try:\n        data = request.get_json()",
         "detail": "backend.utils.riskScore",
         "documentation": {}
     },

@@ -1,6 +1,8 @@
 const Anomaly = require('../models/Anomaly');
 const Transaction = require("../models/transactionModel");
 const axios = require("axios");
+const sendEmail = require("../utils/sendEmail"); // Import email function
+const User = require("../models/userModel"); // Import User model
 
 const FLASK_API_URL = process.env.FLASK_API_URL || 'http://127.0.0.1:5001';
 
@@ -60,7 +62,7 @@ exports.detectAnomalies = async (transactionId) => {
 
       // Save risk score to transaction
       transaction.riskScore = riskScore;
-      transaction.isFlagged = true;
+      transaction.isFlagged = riskScore >= 60;
       transaction.flagReason = riskScore >= 60 ? "High risk score detected" : "Low risk score";
       await transaction.save();
 
@@ -76,6 +78,16 @@ exports.detectAnomalies = async (transactionId) => {
         });
         await anomaly.save();
         console.log(`Anomaly detected for transaction ${transactionId}`);
+
+        // Send email notification
+        const user = await User.findById(transaction.user);
+        if (user && user.email) {
+          const emailSubject = "Transaction Flagged for Review";
+          const emailText = `Hello ${user.firstName},\n\nYour transaction of KES ${transaction.amount} has been flagged for review due to a high-risk score.\n\nIf you believe this is a mistake, please contact support.\n\nThank you for using SmartPurse.`;
+
+          await sendEmail(user.email, emailSubject, emailText);
+          console.log(`Email sent to ${user.email} about flagged transaction.`);
+        }
       }
     } catch (error) {
       console.error("Python API call failed:", error.response ? error.response.data : error.message);
