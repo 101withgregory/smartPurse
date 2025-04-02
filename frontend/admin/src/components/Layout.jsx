@@ -12,7 +12,7 @@ const Layout = () => {
       <Sidebar isCollapsed={isSidebarCollapsed} setIsCollapsed={setIsSidebarCollapsed} />
         <TopNav />
         <div className="main-content">
-           <div className="content">
+           <div className="content ">
           <Outlet />
         </div> 
         </div>

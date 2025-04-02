@@ -185,9 +185,14 @@ const KittyTable = () => {
       name: "Amount Raised", 
       selector: (row) => `Ksh ${row.totalAmount.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 
       sortable: true 
-    }
+    },
+    // { 
+    //   name: "kittyAmount", 
+    //   selector: (row) => `Ksh ${row.kittyAmount.toLocaleString('en-KE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 
+    //   sortable: true 
+    // }
     
-    ,
+    // ,
     {
       name: "Actions",
       cell: (row) => (

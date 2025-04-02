@@ -29,6 +29,8 @@ const dashboardRoutes = require("./routes/dashboardRoutes");
 app.use("/api/dashboard", dashboardRoutes);
 const transactionRoutes = require('./routes/transactionRoutes')
 app.use('/api/transactions', transactionRoutes)
+const contributionRoutes = require('./routes/contributionRoutes')
+app.use('/api/contributions', contributionRoutes)
 const paymentRoutes = require("./routes/paymentRoutes");
 app.use("/api/payments", paymentRoutes);
 const anomalyRoutes = require('./routes/anomalyRoutes')

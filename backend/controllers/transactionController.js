@@ -56,6 +56,21 @@ const createTransaction = asyncHandler(async (req, res) => {
   });
 
   console.log(`Transaction created with amount: ${amount}`);
+  
+  await Kitty.findByIdAndUpdate(
+    kittyId,
+    {
+      $push: {
+        contributors: {
+          userId: req.user._id,
+          amount: amount,
+          contributedAt: new Date()
+        }
+      },
+      $inc: { totalAmount: amount } // Increment the total amount
+    },
+    { new: true }
+  );
 
   // Trigger anomaly detection if amount >= 800,000
   if (amount >= 500000) {
