@@ -17,6 +17,10 @@ A fintech web app to manage group savings and detect fraud using ML anomaly dete
 ![Client Screenshot](https://github.com/101withgregory/smartPurse/blob/main/screenshots/Picture1.png)
 ### Admin Dashboard
 ![Dashboard Screenshot](https://github.com/101withgregory/smartPurse/blob/main/screenshots/Screenshot%20(136).png)
-
+*********************
+© 2025 smartPurse. All Rights Reserved.  
+This software and its concept are the exclusive property of smartPurse.  
+Unauthorized reproduction, distribution, or implementation is strictly prohibited.  
+Legal action will be taken against any infringement.  
 
 ---
