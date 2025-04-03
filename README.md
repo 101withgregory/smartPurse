@@ -13,7 +13,8 @@ A fintech web app to manage group savings and detect fraud using ML anomaly dete
 // Unauthorized use, copying, modification, or distribution of this software is strictly prohibited.
 
 ## Screenshots
-
+### Client 
+![Client Screenshot](https://github.com/101withgregory/smartPurse/blob/main/screenshots/Picture1.png)
 ### Admin Dashboard
 ![Dashboard Screenshot](https://github.com/101withgregory/smartPurse/blob/main/screenshots/Screenshot%20(136).png)
 
