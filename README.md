@@ -11,7 +11,7 @@ A fintech web app to manage group savings and detect fraud using ML anomaly dete
 
 ## Screenshots
 
-### Dashboard
+### Admin Dashboard
 ![Dashboard Screenshot](https://github.com/101withgregory/smartPurse/blob/main/screenshots/Screenshot%20(136).png)
 
 
