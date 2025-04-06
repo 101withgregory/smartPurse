@@ -5,7 +5,7 @@ A fintech web app to manage group savings, contributions and detect fraud using 
 ## Features
 - Secure transactions
 - Dashboard finance tracking visualizations
-- Payment systems
+- MPESA Payment system
 - Anomaly detection
 - Easy Fund tracking
 ********************
