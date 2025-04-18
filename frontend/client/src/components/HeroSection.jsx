@@ -52,7 +52,7 @@ const HeroSection = () => {
           className="lead mb-4"
           style={{ animation: "fadeIn 2s ease", color: "white" }}
         >
-          Join VaultFund and take control of your financial future.
+          Join SmartPurse and take control of your financial future.
         </p>
         <button
           className="btn btn-primary btn-lg px-5 me-3"

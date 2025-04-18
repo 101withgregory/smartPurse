@@ -69,7 +69,7 @@ const Chatbot = () => {
             style={{ flex: "1", display: "flex", flexDirection: "column" }}
           >
             <p className="text-muted">
-              Welcome to Vaultfund! How can we assist you today?
+              Welcome to SmartPurse! How can we assist you today?
             </p>
             {messages.map((message, index) => (
               <div
