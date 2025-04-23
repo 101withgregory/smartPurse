@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
-import { FaPlus, FaEdit, FaTrashAlt } from "react-icons/fa";
+import { FaPlus, FaEdit, FaTrashAlt, FaDownload, FaFileCsv } from "react-icons/fa";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import { DatePicker } from 'antd';
@@ -10,6 +10,7 @@ import withReactContent from "sweetalert2-react-content";
 import Modal from "react-modal";
 import Select from "react-select";
 import kittyService from "../services/kittyService";
+import { exportKittyContributions, exportKittyTransactions } from "../services/exportService";
 
 const MySwal = withReactContent(Swal);
 
@@ -64,6 +65,24 @@ const KittyTable = () => {
     setIsModalOpen(true);
   };
   
+  //handle export for transactions
+  const handleExport = async (kittyId) => {
+    try {
+      await exportKittyTransactions(kittyId);
+    } catch (error) {
+      console.error("Export failed:", error);
+      toast.error("Failed to export transactions.");
+    }
+  };
+  //handle export for contributions
+  const handleExportContributions = async (kittyAddress) => {
+    try {
+      await exportKittyContributions(kittyAddress);
+    } catch (error) {
+      console.error("Error exporting contributions:", error);
+      Swal.fire("Error", "Failed to export contributions", "error");
+    }
+  };
   // Handle Input Change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -205,10 +224,21 @@ const KittyTable = () => {
             className="text-red-500 cursor-pointer"
             onClick={() => handleDelete(row._id)}
           />
+          <FaDownload className="text-green-500 cursor-pointer" onClick={() => handleExport(row._id)} title="Export Transactions" />
+          <FaFileCsv
+              className="text-blue-500 cursor-pointer"
+              onClick={() =>{
+                console.log("Exporting contributions for:", row.kittyAddress)
+                handleExportContributions(row.kittyAddress)} }
+              
+            />
+            
         </div>
       ),
-    },
+    },  
   ];
+ 
+
 
   return (
     <div className="bg-white shadow rounded-lg p-4">

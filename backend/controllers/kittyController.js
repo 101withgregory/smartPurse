@@ -179,7 +179,7 @@ const handleRotatingPayout = asyncHandler(async (req, res) => {
     throw new Error('Not enough contributors to fulfill the payout');
   }
 
-  // ✅ Select Beneficiary
+  // Select Beneficiary
   const beneficiaryIndex = kitty.totalAmount % kitty.beneficiaryNumber;
   const beneficiary = kitty.contributors[beneficiaryIndex];
 
@@ -188,7 +188,7 @@ const handleRotatingPayout = asyncHandler(async (req, res) => {
     throw new Error('Invalid beneficiary data');
   }
 
-  // ✅ Record Transaction
+  // Record Transaction
   const transaction = await Transaction.create({
     kittyId: kitty._id,
     user: beneficiary.userId._id,

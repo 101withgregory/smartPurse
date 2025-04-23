@@ -62,3 +62,43 @@ export const exportPDF = async () => {
     throw error;
   }
 };
+
+
+export const exportKittyTransactions = async (kittyId) => {
+  const token = localStorage.getItem('token');
+
+  const response = await axios.get(`http://localhost:5000/api/export/${kittyId}`, {
+    responseType: "blob",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", `kitty_${kittyId}_transactions.csv`);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+};
+
+
+
+export const exportKittyContributions = async (kittyAddress) => {
+  const token = localStorage.getItem("token");
+  const response = await axios.get(`http://localhost:5000/api/export/${kittyAddress}`, {
+    responseType: "blob",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", `kitty_${kittyAddress}_contributions.csv`);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+};
+
+
