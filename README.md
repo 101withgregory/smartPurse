@@ -13,8 +13,15 @@ A fintech web application to manage group savings and detect fraud using ML anom
 
 ## Screenshots
 
+### Client Home
+![Screenshot](https://github.com/101withgregory/smartPurse/blob/main/screenshots/client%20home.png())
 ### Admin Dashboard
-![Dashboard Screenshot](https://github.com/101withgregory/smartPurse/blob/main/screenshots/Screenshot%20(136).png)
-
+![ Screenshot](https://github.com/101withgregory/smartPurse/blob/main/screenshots/Admin-Panel-dash.png)
+### Contribution Tab
+![ Screenshot](https://github.com/101withgregory/smartPurse/blob/main/screenshots/Admin-Panel-contr.png)
+### Transaction Tab
+![Screenshot](https://github.com/101withgregory/smartPurse/blob/main/screenshots/Admin-Panel-transact.png)
+### Anomalies Tab
+![Screenshot](https://github.com/101withgregory/smartPurse/blob/main/screenshots/Admin-Panel-anom.png)
 
 ---
