@@ -1,6 +1,6 @@
 # Project smartPurse
 
-A fintech web app to manage group savings and detect fraud using ML anomaly detection.
+A fintech web application to manage group savings and detect fraud using ML anomaly detection.
 
 ## Features
 - Secure transactions
